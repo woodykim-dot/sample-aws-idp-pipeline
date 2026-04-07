@@ -51,7 +51,7 @@ export class StaticWebsite extends Construct {
     });
 
     const accessLogsBucket = new Bucket(this, 'AccessLogsBucket', {
-      bucketName: `idp-v2-frontend-access-logs-${Aws.ACCOUNT_ID}`,
+      bucketName: `idp-v2-frontend-access-logs-${Aws.ACCOUNT_ID}-${Aws.REGION}`,
       versioned: false,
       enforceSSL: true,
       autoDeleteObjects: true,
@@ -75,7 +75,7 @@ export class StaticWebsite extends Construct {
 
     // S3 Bucket to hold website files
     this.websiteBucket = new Bucket(this, 'WebsiteBucket', {
-      bucketName: `idp-v2-frontend-${Aws.ACCOUNT_ID}`,
+      bucketName: `idp-v2-frontend-${Aws.ACCOUNT_ID}-${Aws.REGION}`,
       versioned: true,
       enforceSSL: true,
       autoDeleteObjects: true,
@@ -93,7 +93,7 @@ export class StaticWebsite extends Construct {
 
     // Cloudfront Distribution
     const logBucket = new Bucket(this, 'DistributionLogBucket', {
-      bucketName: `idp-v2-frontend-cf-logs-${Aws.ACCOUNT_ID}`,
+      bucketName: `idp-v2-frontend-cf-logs-${Aws.ACCOUNT_ID}-${Aws.REGION}`,
       enforceSSL: true,
       autoDeleteObjects: true,
       removalPolicy: RemovalPolicy.DESTROY,
@@ -181,11 +181,13 @@ export class StaticWebsite extends Construct {
 export class CloudfrontWebAcl extends Stack {
   public readonly wafArn;
   constructor(scope: Construct, id: string) {
+    const parentStack = Stack.of(scope);
     super(scope, id, {
       env: {
         region: 'us-east-1',
-        account: Stack.of(scope).account,
+        account: parentStack.account,
       },
+      stackName: `${parentStack.stackName}-${id}-${parentStack.region}`,
       crossRegionReferences: true,
     });
 

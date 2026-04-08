@@ -114,7 +114,7 @@ export class StaticWebsite extends Construct {
 
     const defaultRootObject = 'index.html';
 
-    const oac = new cloudfront.OriginAccessControl(this, `S3OAC-${Aws.REGION}`, {
+    const oac = new cloudfront.S3OriginAccessControl(this, `S3OAC-${Aws.REGION}`, {
       originAccessControlName: `idp-v2-oac-${Aws.REGION}`, // 이름에도 리전 포함
       signingBehavior: cloudfront.SigningBehavior.ALWAYS,
       signingProtocol: cloudfront.SigningProtocol.SIGV4,

@@ -1,6 +1,6 @@
 import { Aws, CfnOutput, CfnResource, RemovalPolicy, Stack } from 'aws-cdk-lib';
-import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
-import { Distribution, ViewerProtocolPolicy } from 'aws-cdk-lib/aws-cloudfront';
+// import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
+import { Distribution, ViewerProtocolPolicy, S3OriginAccessControl, SigningBehavior, SigningProtocol } from 'aws-cdk-lib/aws-cloudfront';
 import { S3BucketOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import {
   BlockPublicAccess,
@@ -114,10 +114,10 @@ export class StaticWebsite extends Construct {
 
     const defaultRootObject = 'index.html';
 
-    const oac = new cloudfront.S3OriginAccessControl(this, `S3OAC-${Aws.REGION}`, {
+    const oac = new S3OriginAccessControl(this, `S3OAC-${Aws.REGION}`, {
       originAccessControlName: `idp-v2-oac-${Aws.REGION}`, // 이름에도 리전 포함
-      signingBehavior: cloudfront.SigningBehavior.ALWAYS,
-      signingProtocol: cloudfront.SigningProtocol.SIGV4,
+      signingBehavior: SigningBehavior.ALWAYS,
+      signingProtocol: SigningProtocol.SIGV4,
     });
 
     this.cloudFrontDistribution = new Distribution(

@@ -1,6 +1,6 @@
 import { Aws, CfnOutput, CfnResource, RemovalPolicy, Stack } from 'aws-cdk-lib';
 // import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
-import { Distribution, ViewerProtocolPolicy, S3OriginAccessControl, SigningBehavior, SigningProtocol } from 'aws-cdk-lib/aws-cloudfront';
+import { Distribution, ViewerProtocolPolicy, S3OriginAccessControl } from 'aws-cdk-lib/aws-cloudfront';
 import { S3BucketOrigin } from 'aws-cdk-lib/aws-cloudfront-origins';
 import {
   BlockPublicAccess,

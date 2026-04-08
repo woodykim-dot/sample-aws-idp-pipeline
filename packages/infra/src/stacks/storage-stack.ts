@@ -147,9 +147,15 @@ export class StorageStack extends Stack {
     });
 
     // Express One Zone Storage Bucket
+    const expressAzByRegion: Record<string, string> = {
+      'us-east-1': 'use1-az4',
+      'us-west-2': 'usw2-az1',
+    };
+    const expressAzId = expressAzByRegion[Stack.of(this).region] ?? 'use1-az4';
+
     const expressStorage = new S3DirectoryBucket(this, 'ExpressStorage', {
       bucketPrefix: 'lancedb-ex',
-      availabilityZoneId: 'use1-az4',
+      availabilityZoneId: expressAzId,
     });
 
     new StringParameter(this, 'LancedbExpressBucketNameParam', {
@@ -159,7 +165,7 @@ export class StorageStack extends Stack {
 
     new StringParameter(this, 'LancedbExpressAzIdParam', {
       parameterName: SSM_KEYS.LANCEDB_EXPRESS_AZ_ID,
-      stringValue: 'use1-az4',
+      stringValue: expressAzId,
     });
 
     // ElastiCache Serverless (Redis)

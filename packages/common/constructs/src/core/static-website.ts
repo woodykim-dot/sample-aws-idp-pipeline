@@ -116,8 +116,7 @@ export class StaticWebsite extends Construct {
 
     const oac = new S3OriginAccessControl(this, `S3OAC-${Aws.REGION}`, {
       originAccessControlName: `idp-v2-oac-${Aws.REGION}`, // 이름에도 리전 포함
-      signingBehavior: SigningBehavior.ALWAYS,
-      signingProtocol: SigningProtocol.SIGV4,
+      description: `OAC for S3 bucket in ${Aws.REGION}`,
     });
 
     this.cloudFrontDistribution = new Distribution(

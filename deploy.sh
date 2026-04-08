@@ -13,7 +13,7 @@ echo ""
 
 # Default parameters
 REPO_URL="https://github.com/aws-samples/sample-aws-idp-pipeline.git"
-VERSION="main"
+VERSION="fix/multi-region-waf-s3-naming"
 STACK_NAME="sample-aws-idp-pipeline-codebuild"
 TEMPLATE_URL_BASE="https://raw.githubusercontent.com/aws-samples/sample-aws-idp-pipeline"
 TEMPLATE_FILE="/tmp/deploy-codebuild.yml"

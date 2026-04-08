@@ -114,7 +114,7 @@ export class StaticWebsite extends Construct {
 
     const defaultRootObject = 'index.html';
 
-    const oac = new S3OriginAccessControl(this, `S3OAC-${Aws.REGION}`, {
+    const oac = new S3OriginAccessControl(this, `S3OAC`, {
       originAccessControlName: `idp-v2-oac-${Aws.REGION}`, // 이름에도 리전 포함
       description: `OAC for S3 bucket in ${Aws.REGION}`,
     });

@@ -22,7 +22,7 @@ export class S3Bucket extends Construct {
 
     const { bucketPrefix } = props;
     const baseName = props.bucketName
-      ? `idp-v2-${props.bucketName}-${Aws.ACCOUNT_ID}`
+      ? `idp-v2-${props.bucketName}-${Aws.ACCOUNT_ID}-${Aws.REGION}`
       : undefined;
 
     this.logBucket = new Bucket(this, `${bucketPrefix}-LogBucket`, {

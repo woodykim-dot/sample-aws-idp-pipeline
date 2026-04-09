@@ -61,22 +61,29 @@ class BedrockEmbeddingFunction(TextEmbeddingFunction):
                 embeddings.append([0.0] * self._ndims)
                 continue
             try:
+                is_nova = 'nova' in self.model_id
+                if is_nova:
+                    body = json.dumps({
+                        'taskType': 'SINGLE_EMBEDDING',
+                        'singleEmbeddingParams': {
+                            'embeddingPurpose': 'GENERIC_INDEX',
+                            'embeddingDimension': 1024,
+                            'text': {'truncationMode': 'END', 'value': clean_text},
+                        },
+                    })
+                else:
+                    body = json.dumps({
+                        'inputText': clean_text,
+                        'dimensions': 1024,
+                        'normalize': True,
+                    })
                 response = self._client.invoke_model(
                     modelId=self.model_id,
-                    body=json.dumps(
-                        {
-                            'taskType': 'SINGLE_EMBEDDING',
-                            'singleEmbeddingParams': {
-                                'embeddingPurpose': 'GENERIC_INDEX',
-                                'embeddingDimension': 1024,
-                                'text': {'truncationMode': 'END', 'value': clean_text},
-                            },
-                        }
-                    ),
+                    body=body,
                     contentType='application/json',
                 )
                 result = json.loads(response['body'].read())
-                embedding = result['embeddings'][0]['embedding']
+                embedding = result['embeddings'][0]['embedding'] if is_nova else result['embedding']
                 embeddings.append(embedding)
             except Exception as e:
                 print(f'Error generating embedding: {e}')

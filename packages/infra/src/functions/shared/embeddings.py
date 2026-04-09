@@ -26,8 +26,35 @@ def strip_markup(text: str) -> str:
 
 
 EMBEDDING_MODEL_ID = os.environ.get(
-    'EMBEDDING_MODEL_ID', 'amazon.nova-2-multimodal-embeddings-v1:0'
+    'EMBEDDING_MODEL_ID', 'amazon.titan-embed-text-v2:0'
 )
+
+_IS_NOVA = 'nova' in EMBEDDING_MODEL_ID
+
+
+def _build_request_body(text: str) -> str:
+    if _IS_NOVA:
+        return json.dumps({
+            'taskType': 'SINGLE_EMBEDDING',
+            'singleEmbeddingParams': {
+                'embeddingPurpose': 'GENERIC_INDEX',
+                'embeddingDimension': 1024,
+                'text': {'truncationMode': 'END', 'value': text},
+            },
+        })
+    else:
+        return json.dumps({
+            'inputText': text,
+            'dimensions': 1024,
+            'normalize': True,
+        })
+
+
+def _parse_response(result: dict) -> List[float]:
+    if _IS_NOVA:
+        return result['embeddings'][0]['embedding']
+    else:
+        return result['embedding']
 
 
 def generate_single_embedding(text: str, client=None) -> List[float]:
@@ -40,20 +67,11 @@ def generate_single_embedding(text: str, client=None) -> List[float]:
         clean_text = strip_markup(text)
         response = client.invoke_model(
             modelId=EMBEDDING_MODEL_ID,
-            body=json.dumps(
-                {
-                    'taskType': 'SINGLE_EMBEDDING',
-                    'singleEmbeddingParams': {
-                        'embeddingPurpose': 'GENERIC_INDEX',
-                        'embeddingDimension': 1024,
-                        'text': {'truncationMode': 'END', 'value': clean_text},
-                    },
-                }
-            ),
+            body=_build_request_body(clean_text),
             contentType='application/json',
         )
         result = json.loads(response['body'].read())
-        return result['embeddings'][0]['embedding']
+        return _parse_response(result)
     except Exception as e:
         print(f'Error generating embedding: {e}')
         return [0.0] * 1024

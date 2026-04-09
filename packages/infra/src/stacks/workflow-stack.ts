@@ -355,6 +355,11 @@ export class WorkflowStack extends Stack {
     // Lambda Functions
     // ========================================
 
+    const embeddingModelId =
+      Stack.of(this).region === 'us-east-1'
+        ? 'amazon.nova-2-multimodal-embeddings-v1:0'
+        : 'amazon.titan-embed-text-v2:0';
+
     const commonLambdaProps = {
       runtime: lambda.Runtime.PYTHON_3_14,
       architecture: lambda.Architecture.ARM_64,
@@ -363,7 +368,7 @@ export class WorkflowStack extends Stack {
       environment: {
         BDA_OUTPUT_BUCKET: this.documentBucket.bucketName,
         BACKEND_TABLE_NAME: backendTableName,
-        EMBEDDING_MODEL_ID: models.embedding,
+        EMBEDDING_MODEL_ID: embeddingModelId,
       },
     };
 

@@ -51,6 +51,10 @@ export class LanceServiceStack extends Stack {
           TOKA_FUNCTION_NAME: tokaFunction.functionName,
           LANCEDB_EXPRESS_BUCKET_NAME: lancedbExpressBucketName,
           LANCEDB_LOCK_TABLE_NAME: lancedbLockTableName,
+          BEDROCK_EMBEDDING_MODEL_ID:
+            Stack.of(this).region === 'us-east-1'
+              ? 'amazon.nova-2-multimodal-embeddings-v1:0'
+              : 'amazon.titan-embed-text-v2:0',
         },
         bundling: {
           forcedDockerBundling: true,
@@ -85,8 +89,8 @@ export class LanceServiceStack extends Stack {
           's3:ListBucket',
         ],
         resources: [
-          `arn:aws:s3express:${this.region}:${this.account}:bucket/${lancedbExpressBucketName}`,
-          `arn:aws:s3express:${this.region}:${this.account}:bucket/${lancedbExpressBucketName}/*`,
+          `arn:aws:s3express:${Stack.of(this).region}:${Stack.of(this).account}:bucket/${lancedbExpressBucketName}`,
+          `arn:aws:s3express:${Stack.of(this).region}:${Stack.of(this).account}:bucket/${lancedbExpressBucketName}/*`,
         ],
       }),
     );

@@ -3,7 +3,7 @@ use aws_sdk_bedrockruntime::primitives::Blob;
 use serde::{Deserialize, Serialize};
 use tracing::info;
 
-const DEFAULT_MODEL_ID: &str = "amazon.nova-2-multimodal-embeddings-v1:0";
+const DEFAULT_MODEL_ID: &str = "us.amazon.nova-2-multimodal-embeddings-v1:0";
 const EMBEDDING_DIMENSION: usize = 1024;
 
 #[derive(Serialize)]

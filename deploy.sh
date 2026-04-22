@@ -12,11 +12,12 @@ echo "==========================================================================
 echo ""
 
 # Default parameters
-REPO_URL="https://github.com/aws-samples/sample-aws-idp-pipeline.git"
-VERSION="main"
+REPO_URL="https://github.com/woodykim-dot/sample-aws-idp-pipeline.git"
+VERSION="fix/update-citation"
 STACK_NAME="sample-aws-idp-pipeline-codebuild"
 TEMPLATE_URL_BASE="https://raw.githubusercontent.com/aws-samples/sample-aws-idp-pipeline"
 TEMPLATE_FILE="/tmp/deploy-codebuild.yml"
+TEMPLATE_VERSION="main"
 ADMIN_USER_EMAIL=""
 DEPLOY_STACKS=""
 
@@ -98,7 +99,7 @@ while true; do
 done
 
 # Download CloudFormation template
-TEMPLATE_URL="${TEMPLATE_URL_BASE}/${VERSION}/deploy-codebuild.yml"
+TEMPLATE_URL="${TEMPLATE_URL_BASE}/${TEMPLATE_VERSION}/deploy-codebuild.yml"
 echo ""
 echo "Downloading CloudFormation template..."
 echo "  $TEMPLATE_URL"

@@ -834,7 +834,7 @@ export default function ChatInputBox({
                   </div>
                 )
               ) : filteredDocuments.length > 0 ? (
-                filteredDocuments.slice(0, 10).map((doc, index) => (
+                filteredDocuments.map((doc, index) => (
                   <button
                     key={doc.document_id}
                     type="button"

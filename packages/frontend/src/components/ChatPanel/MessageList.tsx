@@ -106,6 +106,8 @@ export default function MessageList({
             key={message.id}
             message={message}
             onImageClick={onImageClick}
+            documents={documents}
+            onSourceClick={onSourceClick}
           />
         ),
       )}
@@ -288,9 +290,13 @@ function StageResult({ message }: { message: ChatMessage }) {
 function AssistantMessage({
   message,
   onImageClick,
+  documents,
+  onSourceClick,
 }: {
   message: ChatMessage;
   onImageClick?: (img: { src: string; alt: string }) => void;
+  documents: Document[];
+  onSourceClick?: (documentId: string, segmentId: string) => void;
 }) {
   const { t } = useTranslation();
   return (
@@ -329,7 +335,7 @@ function AssistantMessage({
       {/* Text content */}
       {message.content && (
         <div className="prose prose-sm dark:prose-invert max-w-none text-slate-800 dark:text-slate-200 [&_strong]:!text-inherit">
-          <MarkdownRenderer>
+          <MarkdownRenderer documents={documents} onSourceClick={onSourceClick}>
             {prepareMarkdown(message.content)}
           </MarkdownRenderer>
         </div>

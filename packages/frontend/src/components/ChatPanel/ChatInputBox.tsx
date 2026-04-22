@@ -745,7 +745,7 @@ export default function ChatInputBox({
         (filteredArtifacts.length > 0 || filteredDocuments.length > 0) && (
           <div
             ref={mentionDropdownRef}
-            className="glass-panel absolute bottom-full left-0 mb-2 w-72 max-h-64 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/[0.08] rounded-lg shadow-lg z-50 overflow-hidden"
+            className="glass-panel absolute bottom-full left-0 mb-2 w-xs max-h-64 bg-white dark:bg-slate-800 border border-slate-200 dark:border-white/[0.08] rounded-lg shadow-lg z-50 overflow-hidden"
           >
             {/* Tabs */}
             <div className="flex border-b border-slate-100 dark:border-white/[0.06]">

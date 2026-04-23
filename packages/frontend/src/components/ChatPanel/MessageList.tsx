@@ -349,7 +349,10 @@ function AssistantMessage({
         <div className="flex flex-wrap gap-1">
           {message.sources.map((source, i) => {
             const idParts = source.segment_id.split('_');
-            const segIdx = parseInt(idParts.at(-2) ?? idParts.at(-1) ?? '0', 10);
+            const segIdx =
+              idParts.length >= 4
+                ? parseInt(idParts[idParts.length - 2], 10)
+                : parseInt(idParts[idParts.length - 1] || '0', 10);
             const doc = documents.find((d) => d.document_id === source.document_id);
             const isLoading = loadingSourceKey === `${source.document_id}:${source.segment_id}`;
             return (

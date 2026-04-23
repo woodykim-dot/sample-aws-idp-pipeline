@@ -353,13 +353,18 @@ function AssistantMessage({
               idParts.length >= 4
                 ? parseInt(idParts[idParts.length - 2], 10)
                 : parseInt(idParts[idParts.length - 1] || '0', 10);
-            const doc = documents.find((d) => d.document_id === source.document_id);
-            const isLoading = loadingSourceKey === `${source.document_id}:${source.segment_id}`;
+            const doc = documents.find(
+              (d) => d.document_id === source.document_id,
+            );
+            const isLoading =
+              loadingSourceKey === `${source.document_id}:${source.segment_id}`;
             return (
               <button
                 key={i}
                 type="button"
-                onClick={() => onSourceClick?.(source.document_id, source.segment_id)}
+                onClick={() =>
+                  onSourceClick?.(source.document_id, source.segment_id)
+                }
                 disabled={!!loadingSourceKey}
                 className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] transition-colors ${
                   isLoading
@@ -372,14 +377,15 @@ function AssistantMessage({
                 ) : (
                   <FileText className="w-3 h-3 opacity-60" />
                 )}
-                <span className="max-w-28 truncate">{doc?.name ?? 'Document'}</span>
+                <span className="max-w-28 truncate">
+                  {doc?.name ?? 'Document'}
+                </span>
                 <span className="opacity-50">p.{segIdx + 1}</span>
               </button>
             );
           })}
         </div>
       )}
-
     </div>
   );
 }

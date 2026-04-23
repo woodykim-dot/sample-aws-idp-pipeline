@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Check, Loader2 } from 'lucide-react';
+import { Check, FileText, Loader2 } from 'lucide-react';
 import BouncingCirclesLoader from '../ui/bouncing-circles-loader';
 import MarkdownRenderer from './MarkdownRenderer';
 import ToolResultCard from './ToolResultCard';
@@ -106,6 +106,9 @@ export default function MessageList({
             key={message.id}
             message={message}
             onImageClick={onImageClick}
+            documents={documents}
+            onSourceClick={onSourceClick}
+            loadingSourceKey={loadingSourceKey}
           />
         ),
       )}
@@ -288,9 +291,15 @@ function StageResult({ message }: { message: ChatMessage }) {
 function AssistantMessage({
   message,
   onImageClick,
+  documents,
+  onSourceClick,
+  loadingSourceKey,
 }: {
   message: ChatMessage;
   onImageClick?: (img: { src: string; alt: string }) => void;
+  documents: Document[];
+  onSourceClick?: (documentId: string, segmentId: string) => void;
+  loadingSourceKey?: string | null;
 }) {
   const { t } = useTranslation();
   return (
@@ -334,6 +343,40 @@ function AssistantMessage({
           </MarkdownRenderer>
         </div>
       )}
+
+      {/* Sources */}
+      {message.sources && message.sources.length > 0 && (
+        <div className="flex flex-wrap gap-1">
+          {message.sources.map((source, i) => {
+            const idParts = source.segment_id.split('_');
+            const segIdx = parseInt(idParts.at(-2) ?? idParts.at(-1) ?? '0', 10);
+            const doc = documents.find((d) => d.document_id === source.document_id);
+            const isLoading = loadingSourceKey === `${source.document_id}:${source.segment_id}`;
+            return (
+              <button
+                key={i}
+                type="button"
+                onClick={() => onSourceClick?.(source.document_id, source.segment_id)}
+                disabled={!!loadingSourceKey}
+                className={`inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] transition-colors ${
+                  isLoading
+                    ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                } disabled:cursor-wait`}
+              >
+                {isLoading ? (
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                ) : (
+                  <FileText className="w-3 h-3 opacity-60" />
+                )}
+                <span className="max-w-28 truncate">{doc?.name ?? 'Document'}</span>
+                <span className="opacity-50">p.{segIdx + 1}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
     </div>
   );
 }
